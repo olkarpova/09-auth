@@ -5,7 +5,7 @@
 // fetchNotes +
 // fetchNoteById +
 // getMe = getServeMe +
-// checkSession
+// checkSession +
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
@@ -48,8 +48,13 @@ export const fetchNotes = async (
 
 // ==функція для отримання деталей однієї нотатки за її id.=======
 export const fetchNoteById = async (id: Note['id']) => {
+  const cookieStore = await cookies();
   const {data} = await nextServer.get<Note>(
-    `/notes/${id}`);
+    `/notes/${id}`, {
+      headers: {
+            Cookie: cookieStore.toString()
+        },
+    });
     return data;
 }
 

@@ -43,10 +43,11 @@ export default function NoteForm() {
         onSuccess: async () => {
             // 5. При успішному створенні нотатки очищуємо чернетку
             clearDraft();
-            // invalidete не потрібен 2:07
-            // queryClient.invalidateQueries({
-            //     queryKey: ['notes'],
-            // });
+            // invalidete не потрібен 2:07 але в 9 дз треба
+            //щоб після створення нової нотатки список нотаток оновлювався.
+            queryClient.invalidateQueries({
+                queryKey: ['notes'],
+            });
             //без цього не оновлювався список нотаток:
             // await queryClient.invalidateQueries({ queryKey: ['notes'] });
             // await queryClient.refetchQueries({ queryKey: ['notes'] });

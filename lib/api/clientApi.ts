@@ -75,7 +75,7 @@ export const fetchNoteById = async (id: Note['id']) => {
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  username: string;
 };
 
 export const register = async (data: RegisterRequest) => {
@@ -113,7 +113,6 @@ export const login = async (data: LoginRequest) => {
 
 export type UpdateUserRequest = {
   username?: string;
-  photoUrl?: string;
 };
 
 export const updateMe = async (payload: UpdateUserRequest) => {

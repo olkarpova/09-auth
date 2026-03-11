@@ -5,14 +5,16 @@ import { cookies } from 'next/headers';
 import { parse } from 'cookie';
 import { checkSession } from '@/lib/api/serverApi';
 
-const privateRoutes = ['/profile'];
+const privateRoutes = ['/profile', '/notes/:path*', '/notes/filter/:path*'];
 const publicRoutes = ['/sign-in', '/sign-up'];
 
 export async function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
+  
+// Шлях, на який користувач намагається перейти
+  const { pathname } = request.nextUrl;
 
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
   const isPrivateRoute = privateRoutes.some((route) => pathname.startsWith(route));
@@ -79,5 +81,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/profile/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/profile/:path*', '/sign-in', '/sign-up', '/notes/:path*', '/notes/filter/:path*'],
 };
