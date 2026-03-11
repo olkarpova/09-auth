@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { NewNoteData } from '../api';
+import { NewNoteData } from '../api/api';
 // import { NoteTag } from '@/types/note';
 // 1. Імпортуємо функцію
 import { persist } from 'zustand/middleware';
