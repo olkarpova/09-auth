@@ -9,7 +9,8 @@
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import { User } from "@/types/user";
-import  type { Note, NoteTag }  from "../../types/note";
+import type { Note, NoteTag } from "../../types/note";
+import axios from "axios";
 
 export interface FetchNotesResponse {
   notes: Note[];
@@ -17,6 +18,10 @@ export interface FetchNotesResponse {
 }
 // axios.defaults.baseURL = 'http://localhost:3000/api'
 
+const serverApi = axios.create({
+  baseURL: `${process.env.NEXT_SERVER_URL}/api`,
+  withCredentials: true,
+});
 
 export const fetchNotes = async (
   page: number = 1,
@@ -60,7 +65,7 @@ export const fetchNoteById = async (id: Note['id']) => {
 
 export const getServerMe = async (): Promise<User> => {
     const cookieStore = await cookies();
-    const {data} = await nextServer.get("/users/me", {
+    const {data} = await serverApi.get("/users/me", {
         headers: {
             Cookie: cookieStore.toString()
         },

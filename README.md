@@ -51,3 +51,32 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
     </p>
   </div>
 </main>
+
+Дві папки — дві різні задачі
+
+┌─────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│ Browser/React │ ──HTTP──▶│ Next.js API │ ──HTTP──▶│ Express Backend │
+│ │ │ (BFF proxy) │ │ (справжній API) │
+│ lib/api/ │ │ app/api/ │ │ localhost:3002 │
+│ (клієнтський) │ │ (серверний) │ │ (чужий код) │
+└─────────────────┘ └──────────────────┘ └──────────────────┘
+lib/api/clientApi/\* — для браузера
+
+Виконується у React компонентах
+Робить запити на Next.js (свій же домен)
+nextServer axios з baseURL = localhost:3000/api
+Twoя робота тут — це звичайний клієнтський код
+
+app/api/\*/route.ts — для Next.js сервера
+
+- Це Next.js API routes (окремий серверний код)
+- Приймає запит від клієнта і перевикликає справжній Express бек
+- Передає Cookies з клієнта на бек
+- api axios з baseURL = https://...onrender.com/api (production) або
+  localhost:3002/api
+
+Чому така архітектура
+
+Безпека: HTTP-only cookies (де токени) недоступні JS у браузері. BFF може їх форвардити, бо він серверний
+CORS: браузер ходить лише на localhost:3000 (Next), а Next вже на бек — без CORS-проблем для клієнта
+Виділена точка контролю: можна логувати, кешувати, перетворювати на сервері
